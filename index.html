@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Schematu Bazy Wiedzy</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Generator Schematu Bazy Wiedzy</h1>
+        <div class="department-section">
+            <input type="text" id="nazwa" placeholder="Nazwa działu" required>
+            <textarea id="opis" placeholder="Opis działu" required></textarea>
+            <button id="addDzialBtn">Dodaj dział</button>
+        </div>
+        <div class="topics-section">
+            <h3>Tematy</h3>
+            <input type="text" id="tematNazwa" placeholder="Nazwa tematu" required>
+            <textarea id="tematWymagania" placeholder="Wymagania (każde w nowej linii)" required></textarea>
+            <button id="addTematBtn" disabled>Dodaj temat</button>
+        </div>
+        <div id="departmentList"></div>
+        <h2>Wygenerowany Schemat</h2>
+        <pre id="schemaOutput"></pre>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
