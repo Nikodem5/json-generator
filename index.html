@@ -10,20 +10,19 @@
     <div class="container">
         <h1>Generator Schematu Bazy Wiedzy</h1>
         <div class="department-section">
-            <input type="text" id="dzialInput" placeholder="Nazwa działu" required>
-            <textarea id="dzialOpis" placeholder="Opis działu" required></textarea>
-            <button onclick="addDzialBtn()">Dodaj dział</button>
+            <input type="text" id="nazwa" placeholder="Nazwa działu" required>
+            <textarea id="opis" placeholder="Opis działu" required></textarea>
+            <button id="addDzialBtn">Dodaj dział</button>
         </div>
         <div class="topics-section">
             <h3>Tematy</h3>
-            <input type="text" id="tematInput" placeholder="Nazwa tematu" required>
-            <textarea id="wymaganiaInput" placeholder="Wymagania (każde w nowej linii)" required></textarea>
-            <button onclick="addTematBtn()">Dodaj temat</button>
+            <input type="text" id="tematNazwa" placeholder="Nazwa tematu" required>
+            <textarea id="tematWymagania" placeholder="Wymagania (każde w nowej linii)" required></textarea>
+            <button id="addTematBtn" disabled>Dodaj temat</button>
         </div>
-        <div class="output-section">
-            <h2>Wygenerowany schemat JSON:</h2>
-            <pre id="schemaOutput"></pre>
-        </div>
+        <div id="departmentList"></div>
+        <h2>Wygenerowany Schemat</h2>
+        <pre id="schemaOutput"></pre>
     </div>
     <script src="script.js"></script>
 </body>

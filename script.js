@@ -1,77 +1,74 @@
-let departments = [];
+let dzialy = [];
 
-function addDzialBtn() {
-    const dzialInput = document.getElementById('dzialInput');
-    const dzialOpis = document.getElementById('dzialOpis');
-    const dzialName = dzialInput.value.trim();
-    const dzialDescription = dzialOpis.value.trim();
-    if (dzialName) {
-        departments.push({ name: dzialName, description: dzialDescription, topics: [] });
-        dzialInput.value = '';
-        dzialOpis.value = '';
+document.getElementById('addDzialBtn').addEventListener('click', function() {
+    const nazwa = document.getElementById('nazwa').value;
+    const opis = document.getElementById('opis').value;
+    
+    if (nazwa && opis) {
+        dzialy.push({ nazwa, opis, tematy: [] });
         updateDepartmentList();
         updateSchema();
+        
+        // Clear department inputs
+        document.getElementById('nazwa').value = '';
+        document.getElementById('opis').value = '';
+        
+        // Enable the "Add Topic" button
+        document.getElementById('addTematBtn').disabled = false;
+    } else {
+        alert('Proszę wypełnić nazwę i opis działu.');
     }
-}
+});
 
-function addTematBtn() {
-    const tematInput = document.getElementById('tematInput');
-    const wymaganiaInput = document.getElementById('wymaganiaInput');
-    const tematName = tematInput.value.trim();
-    const wymagania = wymaganiaInput.value.trim().split('\n').filter(req => req.trim() !== '');
-    if (tematName && departments.length > 0) {
-        const lastDepartment = departments[departments.length - 1];
-        lastDepartment.topics.push({ name: tematName, requirements: wymagania });
-        tematInput.value = '';
-        wymaganiaInput.value = '';
-        updateDepartmentList();
-        updateSchema();
+document.getElementById('addTematBtn').addEventListener('click', function() {
+    const tematNazwa = document.getElementById('tematNazwa').value;
+    const tematWymagania = document.getElementById('tematWymagania').value.split('\n').filter(req => req.trim() !== '');
+    
+    if (tematNazwa && tematWymagania.length > 0) {
+        if (dzialy.length > 0) {
+            const lastDzial = dzialy[dzialy.length - 1];
+            lastDzial.tematy.push({ nazwa: tematNazwa, wymagania: tematWymagania });
+            updateDepartmentList();
+            updateSchema();
+            
+            // Clear topic inputs
+            document.getElementById('tematNazwa').value = '';
+            document.getElementById('tematWymagania').value = '';
+        } else {
+            alert('Proszę najpierw dodać dział.');
+        }
+    } else {
+        alert('Proszę wypełnić nazwę tematu i przynajmniej jedno wymaganie.');
     }
-}
+});
 
 function updateDepartmentList() {
-    const departmentList = document.getElementById('departmentList');
-    departmentList.innerHTML = '';
-    departments.forEach(department => {
-        const departmentElement = document.createElement('div');
-        departmentElement.className = 'department';
-        departmentElement.innerHTML = `<h3>${department.name}</h3><p>${department.description}</p>`;
-        if (department.topics.length > 0) {
-            const topicList = document.createElement('ul');
-            department.topics.forEach(topic => {
-                const topicItem = document.createElement('li');
-                topicItem.textContent = `${topic.name}`;
-                if (topic.requirements.length > 0) {
-                    const reqList = document.createElement('ul');
-                    topic.requirements.forEach(req => {
-                        const reqItem = document.createElement('li');
-                        reqItem.textContent = req;
-                        reqList.appendChild(reqItem);
-                    });
-                    topicItem.appendChild(reqList);
-                }
-                topicList.appendChild(topicItem);
-            });
-            departmentElement.appendChild(topicList);
-        }
-        departmentList.appendChild(departmentElement);
+    const list = document.getElementById('departmentList');
+    list.innerHTML = '';
+    
+    dzialy.forEach((dzial, index) => {
+        const div = document.createElement('div');
+        div.className = 'department';
+        div.innerHTML = `
+            <h3>${dzial.nazwa}</h3>
+            <p>${dzial.opis}</p>
+            <h4>Tematy:</h4>
+            <ul>
+                ${dzial.tematy.map(temat => `
+                    <li>
+                        <strong>${temat.nazwa}</strong>
+                        <ul>
+                            ${temat.wymagania.map(wymaganie => `<li>${wymaganie}</li>`).join('')}
+                        </ul>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+        list.appendChild(div);
     });
 }
 
 function updateSchema() {
-    const schemaOutput = document.getElementById('schemaOutput');
-    const schema = {
-        departments: departments.map(dept => ({
-            name: dept.name,
-            description: dept.description,
-            topics: dept.topics.map(topic => ({
-                name: topic.name,
-                requirements: topic.requirements
-            }))
-        }))
-    };
-    schemaOutput.textContent = JSON.stringify(schema, null, 2);
+    const schema = { dzialy };
+    document.getElementById('schemaOutput').textContent = JSON.stringify(schema, null, 2);
 }
-
-// Initial update
-updateSchema();
